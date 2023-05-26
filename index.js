@@ -152,6 +152,7 @@ app.get("/todos", async (req, res) => {
     });
   }
 });
+
 app.get("/todos/users", async (req, res) => {
   try {
     const todos = await TodoModel.findAll({
