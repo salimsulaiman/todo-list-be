@@ -2,8 +2,9 @@ const express = require("express");
 const UserModel = require("./models").User;
 const TodoModel = require("./models").Todo;
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
-const secretKey = "tMRhFdy6fpB2Nvvllu6lZdB2Ev1RW8";
+dotenv.config();
 
 app = express();
 const port = 3030;
@@ -11,7 +12,7 @@ const port = 3030;
 const auth = async (req, res, next) => {
   try {
     const tokenFromUser = req.header("authorization");
-    const decode = jwt.verify(tokenFromUser, secretKey);
+    const decode = jwt.verify(tokenFromUser, process.env.secretKey);
     // console.log(decode);
     if (decode.role != "admin") {
       res.status(401);
@@ -321,10 +322,10 @@ app.post("/login", async (req, res) => {
       exp: parseInt(new Date().getTime() / 1000 + 12 * 60 * 60),
       role: userFound.role,
     },
-    secretKey
+    process.env.secretKey
   );
   res.send({
     token: token,
   });
 });
-app.listen(port);
+app.listen(process.env.PORT);
